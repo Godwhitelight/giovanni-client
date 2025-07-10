@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "giovanniclient",
+  "version": "${version}",
+  "name": "GiovanniClient",
+  "description": "Team Rocket blasts off at the speed of light!",
+  "authors": [],
+  "contact": {},
+  "license": "GPL-3.0",
+  "icon": "assets/giovanniclient/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-datagen": [
+      "sb.rocket.giovanniclient.client.GiovanniClientDataGenerator"
+    ],
+    "client": [
+      "sb.rocket.giovanniclient.client.GiovanniClientClient"
+    ]
+  },
+  "mixins": [
+    "giovanniclient.mixins.json",
+    {
+      "config": "giovanniclient.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
