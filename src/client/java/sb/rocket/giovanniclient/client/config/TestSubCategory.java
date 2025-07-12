@@ -1,10 +1,10 @@
-package sb.rocket.giovanniclient.client;
+package sb.rocket.giovanniclient.client.config;
 
 import com.google.gson.annotations.Expose;
 import io.github.notenoughupdates.moulconfig.annotations.*;
 import org.lwjgl.glfw.GLFW;
 
-public class MySubCategory {
+public class TestSubCategory {
     @Expose
     @ConfigOption(name = "Text Test", desc = "Text Editor Test")
     @ConfigEditorText

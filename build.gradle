@@ -1,3 +1,6 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import net.fabricmc.loom.task.RemapJarTask
+
 plugins {
     id 'fabric-loom' version '1.11.4'
     id 'maven-publish'
@@ -33,6 +36,7 @@ repositories {
     mavenCentral()
     maven { url = 'https://maven.fabricmc.net/' }
     maven { url = 'https://maven.notenoughupdates.org/releases/' }
+    maven { url = 'https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1' }
 }
 
 configurations {
@@ -53,18 +57,20 @@ dependencies {
 
     // Kotlin stdlib
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    modRuntimeOnly "me.djtheredstoner:DevAuth-fabric:1.2.1"
 }
 
 
 // Configure shadowJar task to relocate MoulConfig package
-tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+tasks.named('shadowJar', ShadowJar) {
     configurations = [project.configurations.shadowModImpl]
     relocate 'io.github.notenoughupdates.moulconfig', 'giovanniclient.shadowed.moulconfig'
 }
 
 // Remap the shadowJar output for Fabric compatibility
-tasks.register('remapShadowJar', net.fabricmc.loom.task.RemapJarTask) {
-    def shadowJarTask = tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar)
+tasks.register('remapShadowJar', RemapJarTask) {
+    def shadowJarTask = tasks.named('shadowJar', ShadowJar)
 
     dependsOn shadowJarTask
 
