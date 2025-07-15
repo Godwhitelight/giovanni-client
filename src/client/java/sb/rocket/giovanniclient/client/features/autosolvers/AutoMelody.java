@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.SlotActionType;
 import sb.rocket.giovanniclient.client.config.ConfigManager;
 
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ public class AutoMelody {
         // two-tick spacing
         if (++counter % 2 == 0) return;
 
-        if (!inHarp || !ConfigManager.getConfig().asc.autoMelodyToggle) return;
+        if (!inHarp || !ConfigManager.getConfig().asc.AUTOMELODY_TOGGLE) return;
 
         Screen current = client.currentScreen;
         if (!(current instanceof GenericContainerScreen gui)) {
@@ -79,7 +78,7 @@ public class AutoMelody {
                             handler.syncId,
                             i,
                             0,
-                            SlotActionType.PICKUP,
+                            ConfigManager.getConfig().asc.AUTOMELODY_CLICKTYPE,
                             client.player
                     );
                     lastClickedSlot = i;

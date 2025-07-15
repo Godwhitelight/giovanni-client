@@ -9,6 +9,7 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 import io.github.notenoughupdates.moulconfig.managed.ManagedConfig;
 import sb.rocket.giovanniclient.client.config.ConfigManager;
+import sb.rocket.giovanniclient.client.features.autosolvers.AutoExperiments;
 import sb.rocket.giovanniclient.client.features.autosolvers.AutoMelody;
 
 public class GiovanniClientClient implements ClientModInitializer {
@@ -22,6 +23,7 @@ public class GiovanniClientClient implements ClientModInitializer {
         // 2) register your AutoMelody handlers.
         //    internally it will no-op if autoMelodyToggle == false
         AutoMelody.register();
+        AutoExperiments.register();
 
         // 3) register your keybind to open the moulconfig screen
         KeyBinding openKey = KeyBindingHelper.registerKeyBinding(
