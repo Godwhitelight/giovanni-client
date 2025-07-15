@@ -11,11 +11,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.collection.DefaultedList;
 import sb.rocket.giovanniclient.client.config.ConfigManager;
 import sb.rocket.giovanniclient.client.util.Utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 public class AutoExperiments {
     private enum ExperimentType {
@@ -279,7 +282,7 @@ public class AutoExperiments {
                 handler.syncId,
                 slot,
                 0,
-                cfg.AUTOMELODY_CLICKTYPE,
+                SlotActionType.CLONE,
                 client.player
         );
     }

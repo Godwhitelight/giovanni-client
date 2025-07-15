@@ -1,32 +1,31 @@
 package sb.rocket.giovanniclient.client;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
-import io.github.notenoughupdates.moulconfig.managed.ManagedConfig;
 import sb.rocket.giovanniclient.client.config.ConfigManager;
 import sb.rocket.giovanniclient.client.features.autosolvers.AutoExperiments;
+import sb.rocket.giovanniclient.client.features.autosolvers.AutoFusion;
 import sb.rocket.giovanniclient.client.features.autosolvers.AutoMelody;
 
 public class GiovanniClientClient implements ClientModInitializer {
-    private ManagedConfig config;
+
+    // Declare the keybinding as a field so it can be accessed by the tick event
+    private static KeyBinding openKey; // Made static for simpler access, or could be instance field
 
     @Override
     public void onInitializeClient() {
-        // 1) load or create your config
-        ConfigManager.init();
+        // The only thing that is truly safe to do immediately is register a shutdown hook.
+        Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::shutdown));
 
-        // 2) register your AutoMelody handlers.
-        //    internally it will no-op if autoMelodyToggle == false
-        AutoMelody.register();
-        AutoExperiments.register();
-
-        // 3) register your keybind to open the moulconfig screen
-        KeyBinding openKey = KeyBindingHelper.registerKeyBinding(
+        // 1) Register your keybind (THIS GOES HERE!)
+        // Keybindings should be registered during ClientModInitializer.onInitializeClient()
+        // or any other time before GameOptions has been initialized (which happens very early).
+        openKey = KeyBindingHelper.registerKeyBinding(
                 new KeyBinding(
                         "key.giovanniclient.open_config",
                         InputUtil.Type.KEYSYM,
@@ -34,16 +33,31 @@ public class GiovanniClientClient implements ClientModInitializer {
                         "category.giovanniclient"
                 )
         );
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+
+        // 2) Register the listener that USES the keybind.
+        // This can also be done directly in onInitializeClient() as ClientTickEvents
+        // doesn't directly touch game options, but its execution waits for ticks.
+        ClientTickEvents.END_CLIENT_TICK.register(tickClient -> {
             while (openKey.wasPressed()) {
-                MinecraftClient.getInstance()
-                        .execute(ConfigManager::openConfigScreen);
+                // Use the client instance provided by the event, which is safe here.
+                tickClient.execute(ConfigManager::openConfigScreen);
             }
         });
 
-        // 4) clean‐up save thread
-        Runtime.getRuntime().addShutdownHook(
-                new Thread(ConfigManager::shutdown)
-        );
+
+        // Everything else that touches Minecraft or its libraries and needs to wait for the client to be ready,
+        // such as loading config or registering features that interact with the game world,
+        // should remain inside CLIENT_STARTED.
+        ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+            // --- IT IS NOW SAFE TO INITIALIZE EVERYTHING ELSE ---
+
+            // Load or create your config
+            ConfigManager.init();
+
+            // Register your features
+            AutoMelody.register();
+            AutoExperiments.register();
+            AutoFusion.register();
+        });
     }
 }

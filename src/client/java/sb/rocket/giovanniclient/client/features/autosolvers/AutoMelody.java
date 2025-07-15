@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.slot.SlotActionType;
 import sb.rocket.giovanniclient.client.config.ConfigManager;
 
 import java.util.ArrayList;
@@ -78,7 +79,8 @@ public class AutoMelody {
                             handler.syncId,
                             i,
                             0,
-                            ConfigManager.getConfig().asc.AUTOMELODY_CLICKTYPE,
+                            //ConfigManager.getConfig().asc.AUTOMELODY_CLICKTYPE,
+                            SlotActionType.CLONE,
                             client.player
                     );
                     lastClickedSlot = i;

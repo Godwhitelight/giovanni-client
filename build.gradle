@@ -1,11 +1,7 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import net.fabricmc.loom.task.RemapJarTask
-
 plugins {
     id 'fabric-loom' version '1.11.4'
     id 'maven-publish'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
-    id 'org.jetbrains.kotlin.jvm' // Shadow plugin
+    id 'org.jetbrains.kotlin.jvm'
 }
 
 version = project.mod_version
@@ -34,15 +30,9 @@ fabricApi {
 
 repositories {
     mavenCentral()
-    maven { url = 'https://maven.fabricmc.net/' }
+    maven { url "https://maven.fabricmc.net/" }
     maven { url = 'https://maven.notenoughupdates.org/releases/' }
     maven { url = 'https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1' }
-}
-
-configurations {
-    shadowModImpl {
-        extendsFrom configurations.modImplementation // Remap needed
-    }
 }
 
 dependencies {
@@ -51,37 +41,12 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    // MoulConfig core + annotation processor - NOTE THE ARTIFACT NAME CHANGE
-    modImplementation      "org.notenoughupdates.moulconfig:modern-1.21.5:${project.moulconfig_version}"
-    shadowModImpl         "org.notenoughupdates.moulconfig:modern-1.21.5:${project.moulconfig_version}"
-
-    // Kotlin stdlib
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    // Use Fabric's include configuration to bundle MoulConfig
+    modImplementation "org.notenoughupdates.moulconfig:modern-1.21.5:${project.moulconfig_version}"
+    include "org.notenoughupdates.moulconfig:modern-1.21.5:${project.moulconfig_version}"
 
     modRuntimeOnly "me.djtheredstoner:DevAuth-fabric:1.2.1"
 }
-
-
-// Configure shadowJar task to relocate MoulConfig package
-tasks.named('shadowJar', ShadowJar) {
-    configurations = [project.configurations.shadowModImpl]
-    relocate 'io.github.notenoughupdates.moulconfig', 'giovanniclient.shadowed.moulconfig'
-}
-
-// Remap the shadowJar output for Fabric compatibility
-tasks.register('remapShadowJar', RemapJarTask) {
-    def shadowJarTask = tasks.named('shadowJar', ShadowJar)
-
-    dependsOn shadowJarTask
-
-    inputFile.set(shadowJarTask.get().archiveFile)
-    archiveClassifier.set("shadowed")
-    addNestedDependencies.set(true)
-    targetNamespace.set("named")
-}
-
-// Make the build depend on the remapped shadow JAR
-build.dependsOn tasks.remapShadowJar
 
 processResources {
     inputs.property "version", project.version
@@ -114,7 +79,7 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}" }
+        rename { "${it}_${project.archives_base_name}" }
     }
 }
 
@@ -127,9 +92,10 @@ publishing {
     }
 
     repositories {
-        // Configure publishing repos here if needed
+        // ...
     }
 }
+
 kotlin {
     jvmToolchain(21)
 }
