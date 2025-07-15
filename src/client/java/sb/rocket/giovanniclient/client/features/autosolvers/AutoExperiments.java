@@ -57,7 +57,7 @@ public class AutoExperiments {
 
     // old onGuiOpen
     private void onScreenInit(MinecraftClient client, Screen screen) {
-        if (!cfg.AUTOEXPERIMENTS_TOGGLE) {
+        if (!cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_TOGGLE) {
             clearAll();
             return;
         }
@@ -86,7 +86,7 @@ public class AutoExperiments {
 
     private void onTick(MinecraftClient client) {
 
-        if (!cfg.AUTOEXPERIMENTS_TOGGLE
+        if (!cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_TOGGLE
                 || currentExperiment == ExperimentType.NONE
                 || client.player == null) {
             return;
@@ -128,7 +128,7 @@ public class AutoExperiments {
             Utils.debug("End delay: " + (endDelay-rightNow) + "ms");
         }
 
-        if (rightNow > endDelay && cfg.AUTOEXPERIMENTS_AUTOQUIT) {
+        if (rightNow > endDelay && cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_AUTOQUIT) {
             // if (container.getSlot(11).getStack().getItem() == Items.skull) {
             client.player.closeHandledScreen();
             endDelay = -1;
@@ -147,7 +147,7 @@ public class AutoExperiments {
         if (itemStageFlag.isOf(Items.GLOWSTONE) &&
                 !container.get(lastAdded).getStack().hasGlint()) {  // Changed from hasEnchantments to hasGlint
             sequenceAdded = false;
-            if (chronomatronOrder.size() > (11 - cfg.METAPHYSICAL_SERUM.toInt())) {
+            if (chronomatronOrder.size() > (11 - cfg.autoExperimentsAccordion.METAPHYSICAL_SERUM.toInt())) {
                 client.player.closeHandledScreen();
             }
         }
@@ -192,7 +192,7 @@ public class AutoExperiments {
                 chronomatronOrder.size() > clicks) {
 
             if (clickDelay == -1) {
-                clickDelay =  rightNow + new Random().nextInt(cfg.AUTOEXPERIMENTS_CLICK_DELAY_MAX - cfg.AUTOEXPERIMENTS_CLICK_DELAY_MIN) + cfg.AUTOEXPERIMENTS_CLICK_DELAY_MIN;
+                clickDelay =  rightNow + new Random().nextInt(cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MAX - cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MIN) + cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MIN;
                 Utils.debug("Note n" + (clicks+1) + ", Click delay: " + (clickDelay-rightNow) + "ms");
             }
 
@@ -241,13 +241,13 @@ public class AutoExperiments {
                 ultrasequencerOrder.containsKey(clicks)) {
 
             if (clickDelay == -1) {
-                clickDelay =  rightNow + new Random().nextInt(cfg.AUTOEXPERIMENTS_CLICK_DELAY_MAX - cfg.AUTOEXPERIMENTS_CLICK_DELAY_MIN) + cfg.AUTOEXPERIMENTS_CLICK_DELAY_MIN;
+                clickDelay =  rightNow + new Random().nextInt(cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MAX - cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MIN) + cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MIN;
                 Utils.debug("Note n" + (clicks+1) + ", Click delay: " + (clickDelay-rightNow) + "ms");
             }
 
             if (rightNow > clickDelay) {
                 // exits once we're done
-                if (ultrasequencerOrder.size() > (9 - cfg.METAPHYSICAL_SERUM.toInt()))
+                if (ultrasequencerOrder.size() > (9 - cfg.autoExperimentsAccordion.METAPHYSICAL_SERUM.toInt()))
                     client.player.closeHandledScreen();
 
                 Integer slotNumber = ultrasequencerOrder.get(clicks);

@@ -1,10 +1,7 @@
 package sb.rocket.giovanniclient.client.features.autosolvers;
 
 import com.google.gson.annotations.Expose;
-import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorBoolean;
-import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorDropdown;
-import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorSlider;
-import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
+import io.github.notenoughupdates.moulconfig.annotations.*;
 
 public class AutoSolversConfig {
 
@@ -17,58 +14,69 @@ public class AutoSolversConfig {
 //    @ConfigOption(name = "Click Type", desc = "Changes how to interact with the items in the harp.")
 //    @ConfigEditorDropdown
 //    public transient SlotActionType AUTOMELODY_CLICKTYPE; // good for experiments too
-
     @Expose
-    @ConfigOption(name = "AutoExperiments", desc = "")
-    @ConfigEditorBoolean
-    public boolean AUTOEXPERIMENTS_TOGGLE = false;
+    @Accordion
+    @ConfigOption(name = "AutoExperiments", desc = "Automatically does the annoying experiments")
+    public AutoExperimentsAccordion autoExperimentsAccordion = new AutoExperimentsAccordion();
+    public static class AutoExperimentsAccordion {
 
-    @Expose
-    @ConfigOption(name = "AE click delay min", desc = "")
-    @ConfigEditorSlider(minValue = 200, maxValue = 1000, minStep = 10)
-    public int AUTOEXPERIMENTS_CLICK_DELAY_MIN = 500;
+        @Expose
+        @ConfigOption(name = "AutoExperiments", desc = "Main Toggle")
+        @ConfigEditorBoolean
+        public boolean AUTOEXPERIMENTS_TOGGLE = false;
 
-    @Expose
-    @ConfigOption(name = "AE click delay max", desc = "")
-    @ConfigEditorSlider(minValue = 500, maxValue = 1000, minStep = 10)
-    public int AUTOEXPERIMENTS_CLICK_DELAY_MAX = 700;
+        @Expose
+        @ConfigOption(name = "Min Click Delay", desc = "Please don't be dumb")
+        @ConfigEditorSlider(minValue = 234, maxValue = 1000, minStep = 25)
+        public int AUTOEXPERIMENTS_CLICK_DELAY_MIN = 500;
 
-    public enum MetaphysicalSerum {
-        ONE,   // ordinal = 0
-        TWO,   // ordinal = 1
-        THREE; // ordinal = 2
+        @Expose
+        @ConfigOption(name = "Max Click Delay", desc = "")
+        @ConfigEditorSlider(minValue = 678, maxValue = 1000, minStep = 25)
+        public int AUTOEXPERIMENTS_CLICK_DELAY_MAX = 700;
 
-        /** Returns 1,2,3 instead of 0,1,2 */
-        public int toInt() {
-            return this.ordinal() + 1;
+        public enum MetaphysicalSerum {
+            ONE,   // ordinal = 0
+            TWO,   // ordinal = 1
+            THREE; // ordinal = 2
+
+            /** Returns 1,2,3 instead of 0,1,2 */
+            public int toInt() {
+                return this.ordinal() + 1;
+            }
         }
+
+        @Expose
+        @ConfigOption(name = "Metaphysical Serum", desc = "Select how many you've eaten")
+        @ConfigEditorDropdown
+        public MetaphysicalSerum METAPHYSICAL_SERUM = MetaphysicalSerum.THREE;
+
+        @Expose
+        @ConfigOption(name = "AutoQuit", desc = "Quits the experiments at the end")
+        @ConfigEditorBoolean
+        public boolean AUTOEXPERIMENTS_AUTOQUIT = false;
     }
 
     @Expose
-    @ConfigOption(name = "metaphisical serum", desc = "")
-    @ConfigEditorDropdown
-    public MetaphysicalSerum METAPHYSICAL_SERUM = MetaphysicalSerum.THREE;
+    @Accordion
+    @ConfigOption(name = "AutoExperiments", desc = "Automatically does the annoying experiments")
+    public AutoFusionAccordtion autoFusionAccordtion = new AutoFusionAccordtion();
+    public static class AutoFusionAccordtion {
+        @Expose
+        @ConfigOption(name = "AutoFusion Toggle", desc = "Repeats last fusion in loop")
+        @ConfigEditorBoolean
+        public boolean AUTOFUSION = false;
 
-    @Expose
-    @ConfigOption(name = "auto quit experiment", desc = "")
-    @ConfigEditorBoolean
-    public boolean AUTOEXPERIMENTS_AUTOQUIT = false;
+        @Expose
+        @ConfigOption(name = "Min Click Delay", desc = "Please don't be dumb")
+        @ConfigEditorSlider(minValue = 345, maxValue = 1000, minStep = 50)
+        public int AUTOFUSION_CLICK_DELAY_MIN = 400;
 
-    @Expose
-    @ConfigOption(name = "AutoFusion", desc = "repeats last fusion in loop")
-    @ConfigEditorBoolean
-    public boolean AUTOFUSION = false;
-
-
-    @Expose
-    @ConfigOption(name = "AF click delay max", desc = "")
-    @ConfigEditorSlider(minValue = 200, maxValue = 1000, minStep = 10)
-    public int AUTOFUSION_CLICK_DELAY_MAX = 800;
-
-    @Expose
-    @ConfigOption(name = "AF click delay min", desc = "")
-    @ConfigEditorSlider(minValue = 200, maxValue = 1000, minStep = 10)
-    public int AUTOFUSION_CLICK_DELAY_MIN = 400;
+        @Expose
+        @ConfigOption(name = "Max Click Delay", desc = "")
+        @ConfigEditorSlider(minValue = 456, maxValue = 5000, minStep = 50)
+        public int AUTOFUSION_CLICK_DELAY_MAX = 800;
+    }
 
 
 }

@@ -43,7 +43,7 @@ public class AutoFusion {
 
     // old onGuiOpen
     private void onScreenInit(MinecraftClient client, Screen screen) {
-        if (!cfg.AUTOEXPERIMENTS_TOGGLE)
+        if (!cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_TOGGLE)
             return;
 
         // we only care about chest‐style GUIs
@@ -63,7 +63,7 @@ public class AutoFusion {
 
     private void onTick(MinecraftClient client) {
 
-        if (!cfg.AUTOFUSION
+        if (!cfg.autoFusionAccordtion.AUTOFUSION
                 || currentState == State.NONE
                 || client.player == null) {
             return;
@@ -101,7 +101,7 @@ public class AutoFusion {
 
         if (chest.get(slot).getStack().getItem().toString() .equals("minecraft:player_head")) {
             if (clickDelay == -1) {
-                clickDelay =  rightNow + rng.nextInt(cfg.AUTOFUSION_CLICK_DELAY_MAX - cfg.AUTOFUSION_CLICK_DELAY_MIN) + cfg.AUTOFUSION_CLICK_DELAY_MIN;
+                clickDelay =  rightNow + rng.nextInt(cfg.autoFusionAccordtion.AUTOFUSION_CLICK_DELAY_MAX - cfg.autoFusionAccordtion.AUTOFUSION_CLICK_DELAY_MIN) + cfg.autoFusionAccordtion.AUTOFUSION_CLICK_DELAY_MIN;
                 Utils.debug("Click delay: " + (clickDelay-rightNow) + "ms");
             }
 
@@ -121,7 +121,7 @@ public class AutoFusion {
         int slot = 33;
         if (chest.get(slot).getStack().getItem().toString() .equals("minecraft:lime_terracotta")) {
             if (clickDelay == -1) {
-                clickDelay =  rightNow + rng.nextInt(cfg.AUTOFUSION_CLICK_DELAY_MAX - cfg.AUTOFUSION_CLICK_DELAY_MIN) + cfg.AUTOFUSION_CLICK_DELAY_MIN;
+                clickDelay =  rightNow + rng.nextInt(cfg.autoFusionAccordtion.AUTOFUSION_CLICK_DELAY_MAX - cfg.autoFusionAccordtion.AUTOFUSION_CLICK_DELAY_MIN) + cfg.autoFusionAccordtion.AUTOFUSION_CLICK_DELAY_MIN;
                 Utils.debug("Click delay: " + (clickDelay-rightNow) + "ms");
             }
 
