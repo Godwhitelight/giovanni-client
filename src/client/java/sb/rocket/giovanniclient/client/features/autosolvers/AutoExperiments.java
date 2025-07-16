@@ -103,7 +103,7 @@ public class AutoExperiments {
 
         // Small random startup delay (200-600ms)
         if (startDelay == -1) {
-            startDelay = rightNow + new Random().nextInt(START_DELAY_MAX - START_DELAY_MIN) + START_DELAY_MIN;
+            startDelay = rightNow + rng.nextInt(START_DELAY_MAX - START_DELAY_MIN) + START_DELAY_MIN;
             Utils.debug("Start delay: " + (startDelay - rightNow));
         }
 
@@ -124,7 +124,7 @@ public class AutoExperiments {
 
     private void tickEnd(MinecraftClient client, ScreenHandler handler, long rightNow) {
         if (endDelay == -1) {
-            endDelay =  rightNow + new Random().nextInt(END_DELAY_MAX - END_DELAY_MIN) + END_DELAY_MIN;
+            endDelay =  rightNow + rng.nextInt(END_DELAY_MAX - END_DELAY_MIN) + END_DELAY_MIN;
             Utils.debug("End delay: " + (endDelay-rightNow) + "ms");
         }
 
@@ -192,7 +192,7 @@ public class AutoExperiments {
                 chronomatronOrder.size() > clicks) {
 
             if (clickDelay == -1) {
-                clickDelay =  rightNow + new Random().nextInt(cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MAX - cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MIN) + cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MIN;
+                clickDelay =  rightNow + rng.nextInt(cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MAX - cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MIN) + cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MIN;
                 Utils.debug("Note n" + (clicks+1) + ", Click delay: " + (clickDelay-rightNow) + "ms");
             }
 
@@ -241,7 +241,7 @@ public class AutoExperiments {
                 ultrasequencerOrder.containsKey(clicks)) {
 
             if (clickDelay == -1) {
-                clickDelay =  rightNow + new Random().nextInt(cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MAX - cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MIN) + cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MIN;
+                clickDelay =  rightNow + rng.nextInt(cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MAX - cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MIN) + cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_CLICK_DELAY_MIN;
                 Utils.debug("Note n" + (clicks+1) + ", Click delay: " + (clickDelay-rightNow) + "ms");
             }
 

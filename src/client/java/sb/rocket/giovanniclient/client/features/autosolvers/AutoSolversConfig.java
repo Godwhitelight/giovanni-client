@@ -59,7 +59,7 @@ public class AutoSolversConfig {
 
     @Expose
     @Accordion
-    @ConfigOption(name = "AutoExperiments", desc = "Automatically does the annoying experiments")
+    @ConfigOption(name = "AutoFusion", desc = "Automatically repeats Shard Fusions")
     public AutoFusionAccordtion autoFusionAccordtion = new AutoFusionAccordtion();
     public static class AutoFusionAccordtion {
         @Expose
@@ -69,12 +69,12 @@ public class AutoSolversConfig {
 
         @Expose
         @ConfigOption(name = "Min Click Delay", desc = "Please don't be dumb")
-        @ConfigEditorSlider(minValue = 345, maxValue = 1000, minStep = 50)
+        @ConfigEditorSlider(minValue = 300, maxValue = 1000, minStep = 50)
         public int AUTOFUSION_CLICK_DELAY_MIN = 400;
 
         @Expose
         @ConfigOption(name = "Max Click Delay", desc = "")
-        @ConfigEditorSlider(minValue = 456, maxValue = 5000, minStep = 50)
+        @ConfigEditorSlider(minValue = 400, maxValue = 5000, minStep = 50)
         public int AUTOFUSION_CLICK_DELAY_MAX = 800;
     }
 

@@ -31,27 +31,27 @@ public class AutoFusion {
 
     private AutoFusion.State currentState = State.NONE;
 
-    private long startDelay = -1, endDelay = -1, clickDelay = -1;
+    private long clickDelay = -1;
 
     /** Call once during client init **/
     public static void register() {
         AutoFusion inst = new AutoFusion();
         ScreenEvents.AFTER_INIT.register((mc, screen, w, h) ->
-                inst.onScreenInit(mc, screen));
+                inst.onScreenInit(screen));
         ClientTickEvents.END_CLIENT_TICK.register(inst::onTick);
     }
 
     // old onGuiOpen
-    private void onScreenInit(MinecraftClient client, Screen screen) {
-        if (!cfg.autoExperimentsAccordion.AUTOEXPERIMENTS_TOGGLE)
+    private void onScreenInit(Screen screen) {
+        if (!cfg.autoFusionAccordtion.AUTOFUSION)
             return;
 
         // we only care about chest‐style GUIs
         if (!(screen instanceof GenericContainerScreen))
             return;
 
-        String chestName = screen
-                .getTitle().getString();
+        String chestName = screen.getTitle().getString();
+
         if (chestName.contains("Fusion Box")) {
             Utils.debug("Fusion Box detected");
             currentState = State.FUSION_BOX;
@@ -62,7 +62,6 @@ public class AutoFusion {
     }
 
     private void onTick(MinecraftClient client) {
-
         if (!cfg.autoFusionAccordtion.AUTOFUSION
                 || currentState == State.NONE
                 || client.player == null) {
@@ -77,14 +76,6 @@ public class AutoFusion {
         ScreenHandler handler = client.player.currentScreenHandler;
 
         long rightNow = System.currentTimeMillis();
-
-        // Small random startup delay (200-600ms)
-        if (startDelay == -1) {
-            startDelay = rightNow + new Random().nextInt(START_DELAY_MAX - START_DELAY_MIN) + START_DELAY_MIN;
-            Utils.debug("Start delay: " + (startDelay - rightNow));
-        }
-
-        if (rightNow < startDelay) return;
 
         switch (currentState) {
             case State.FUSION_BOX -> repeatFusion(client, handler, rightNow);
@@ -110,8 +101,6 @@ public class AutoFusion {
                 clickDelay = -1;
             }
         }
-
-
     }
 
     private void confirmFusion(MinecraftClient client,
