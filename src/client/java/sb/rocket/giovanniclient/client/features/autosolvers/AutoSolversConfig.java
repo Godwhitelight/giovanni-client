@@ -76,6 +76,16 @@ public class AutoSolversConfig {
         @ConfigOption(name = "Max Click Delay", desc = "")
         @ConfigEditorSlider(minValue = 400, maxValue = 5000, minStep = 50)
         public int AUTOFUSION_CLICK_DELAY_MAX = 800;
+
+        @Expose
+        @ConfigOption(name = "Auto Shards Claim", desc = "")
+        @ConfigEditorBoolean
+        public boolean AUTOSHARDSCLAIM = false;
+
+        @Expose
+        @ConfigOption(name = "Shard Name", desc = "The name of the shard to automatically claim")
+        @ConfigEditorText
+        public String NAME_OF_THE_SHARD_TO_CLAIM = "Wobbuffett";
     }
 
 

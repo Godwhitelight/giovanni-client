@@ -8,13 +8,9 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 import sb.rocket.giovanniclient.client.config.ConfigManager;
-import sb.rocket.giovanniclient.client.features.autosolvers.AutoExperiments;
-import sb.rocket.giovanniclient.client.features.autosolvers.AutoFusion;
-import sb.rocket.giovanniclient.client.features.autosolvers.AutoMelody;
+import sb.rocket.giovanniclient.client.features.FeatureManager;
 
 public class GiovanniClientClient implements ClientModInitializer {
-
-    public static final boolean PRERELEASE = true;
 
     @Override
     public void onInitializeClient() {
@@ -39,9 +35,7 @@ public class GiovanniClientClient implements ClientModInitializer {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             ConfigManager.init();
 
-            AutoMelody.register();
-            AutoExperiments.register();
-            AutoFusion.register();
+            FeatureManager.registerAll();
         });
     }
 }
