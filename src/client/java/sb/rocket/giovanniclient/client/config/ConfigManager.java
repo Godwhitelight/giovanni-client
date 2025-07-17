@@ -20,6 +20,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class ConfigManager {
+    public static boolean shouldOpenFromCommand = false;
+
     private static final Gson GSON = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
             .setPrettyPrinting()
@@ -108,7 +110,11 @@ public class ConfigManager {
         }
         IMinecraft.instance.openWrappedScreen(editor);
     }
-
+    
+    public static void openConfigScreenFromCommand() {
+        shouldOpenFromCommand = true;
+    }
+    
     public static void shutdown() {
         SCHEDULER.shutdownNow();
         saveConfig("shutdown");

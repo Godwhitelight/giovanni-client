@@ -12,12 +12,11 @@ public class MainConfig extends Config {
     }
 
     @Expose
-    @Category(name = "Debug", desc = "here be dragons")
-    public DebugConfig dc = new DebugConfig();
-
-    @Expose
     @Category(name = "AutoSolvers", desc = "Various auto solvers for GUIs")
     public AutoSolversConfig asc = new AutoSolversConfig();
 
+    @Expose
+    @Category(name = "Debug", desc = "here be dragons")
+    public DebugConfig dc = new DebugConfig();
 
 }
