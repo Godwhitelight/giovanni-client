@@ -51,6 +51,7 @@ public class ConfigManager {
         // but *do not* new-up the MoulConfigEditor yet.
         processor = new MoulConfigProcessor<>(config);
         BuiltinMoulConfigGuis.addProcessors(processor);
+
         driver = new ConfigProcessorDriver(processor);
         driver.processConfig(config);
 
@@ -110,11 +111,11 @@ public class ConfigManager {
         }
         IMinecraft.instance.openWrappedScreen(editor);
     }
-    
+
     public static void openConfigScreenFromCommand() {
         shouldOpenFromCommand = true;
     }
-    
+
     public static void shutdown() {
         SCHEDULER.shutdownNow();
         saveConfig("shutdown");

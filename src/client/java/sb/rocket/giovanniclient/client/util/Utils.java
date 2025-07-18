@@ -24,6 +24,8 @@ public class Utils {
         }
     }
 
+    public static void chat(String s) {out(s);}
+
     public static void debug(String s) {
         if (cfg.DEBUG && client != null && client.inGameHud != null) {
 
@@ -35,5 +37,9 @@ public class Utils {
 
             client.inGameHud.getChatHud().addMessage(prefix.copy().append(message));
         }
+    }
+
+    public static void log(String s) {
+        System.out.println("GiovanniClient LOGGING: " + s);
     }
 }
