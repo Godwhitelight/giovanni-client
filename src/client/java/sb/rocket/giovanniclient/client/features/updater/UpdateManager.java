@@ -1,19 +1,22 @@
 package sb.rocket.giovanniclient.client.features.updater;
 
 import moe.nea.libautoupdate.*;
+import net.minecraft.client.MinecraftClient;
 import sb.rocket.giovanniclient.client.GiovanniClientClient;
+import sb.rocket.giovanniclient.client.features.AbstractFeature;
 import sb.rocket.giovanniclient.client.util.Utils;
 
 import java.util.concurrent.CompletableFuture;
 
 import static sb.rocket.giovanniclient.client.GiovanniClientClient.MOD_VERSION_CODE;
 
-public class UpdateManager {
+public class UpdateManager extends AbstractFeature {
 
     // You might want to make this a singleton or inject it depending on your overall architecture.
     // For simplicity, we'll keep it as a regular class instance.
 
     private PotentialUpdate pendingUpdate = null;
+    public static boolean updateScheduled = false;
 
     public PotentialUpdate getPendingUpdate() {
         return pendingUpdate;
@@ -27,7 +30,7 @@ public class UpdateManager {
      * @return A CompletableFuture that completes with the PotentialUpdate result.
      */
     public CompletableFuture<PotentialUpdate> checkForUpdate() {
-        Utils.chat("Checking for updates...");
+        Utils.log("Checking for updates...");
 
         UpdateContext updateContext = new UpdateContext(
                 UpdateSource.gistSource("GiovanniClient", "2570c325b01b3a20637b7d5855afe71d"),
@@ -69,12 +72,15 @@ public class UpdateManager {
             return CompletableFuture.completedFuture(null);
         }
 
+        System.out.println("BANANAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
         Utils.chat("Downloading update...");
 
         CompletableFuture<Void> future = potentialUpdate.launchUpdate();
 
         future.thenRun(() -> {
             Utils.chat("Update downloaded! It will be applied on next game restart.");
+            updateScheduled = true;
             this.pendingUpdate = null; // Clear after successful launch
         }).exceptionally(ex -> {
             System.err.println("Failed to launch update: " + ex.getMessage());
@@ -83,5 +89,30 @@ public class UpdateManager {
             return null;
         });
         return future;
+    }
+
+    @Override
+    public void onWorldLoad(MinecraftClient client) {
+        Utils.log("we joined a world");
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000); // This sleep is on the new thread, won't freeze game
+                Utils.debug("MyFeatureWithSeparateThread: Delay completed on separate thread.");
+
+                // IMPORTANT: If you need to interact with Minecraft's state,
+                // you must enqueue it to the main thread!
+                MinecraftClient.getInstance().execute(() -> {
+                    Utils.debug("MyFeatureWithSeparateThread: Executing Minecraft API call on main thread.");
+                    if (client.player != null) {
+                        // Example: Send a message to the player
+                        Utils.chat("hello from delayed task");
+                    }
+                });
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // Restore the interrupted status
+                Utils.debug("MyFeatureWithSeparateThread: Thread interrupted during delay.");
+            }
+        }, "MyMod-DelayedJoinTask").start(); // Give your thread a name for debugging
     }
 }

@@ -2,6 +2,7 @@ package sb.rocket.giovanniclient.client.config;
 
 import com.google.gson.annotations.Expose;
 import io.github.notenoughupdates.moulconfig.Config;
+import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorBoolean;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigEditorButton;
 import io.github.notenoughupdates.moulconfig.annotations.ConfigOption;
 import sb.rocket.giovanniclient.client.GiovanniClientClient; // Import your main class
@@ -20,6 +21,15 @@ public class AboutConfig extends Config {
     // private final UpdateManager updateManager = new UpdateManager();
 
     @Expose
+    @ConfigOption(name = "Auto Check for Updates", desc = "checks only and notifies you. For auto updates turn on the feature below")
+    @ConfigEditorBoolean
+    public boolean AUTO_CHECK_FOR_UPDATES = false;
+
+    @Expose
+    @ConfigOption(name = "Auto Update", desc = "only works with \"Auto check for updates\" enabled")
+    @ConfigEditorBoolean
+    public boolean AUTO_UPDATE = false;
+
     @ConfigOption(name = "Check for Updates", desc = "Manually check if an update is available.")
     @ConfigEditorButton(buttonText = "Check Now")
     public Runnable checkUpdateButton = () -> {
@@ -37,7 +47,6 @@ public class AboutConfig extends Config {
         lastCheckButtonClickTime = currentTime; // Reset cooldown
     };
 
-    @Expose
     @ConfigOption(name = "Download Update", desc = "Download and install the available update (only if a check found one).")
     @ConfigEditorButton(buttonText = "Download Now")
     public Runnable downloadUpdateButton = () -> {

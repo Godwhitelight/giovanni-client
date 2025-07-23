@@ -1,11 +1,13 @@
 package sb.rocket.giovanniclient.client.features;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import sb.rocket.giovanniclient.client.features.autosolvers.AutoExperiments;
 import sb.rocket.giovanniclient.client.features.autosolvers.AutoFusion;
 import sb.rocket.giovanniclient.client.features.autosolvers.AutoMelody;
 import sb.rocket.giovanniclient.client.features.autosolvers.AutoShardsClaim;
+import sb.rocket.giovanniclient.client.features.updater.StartupMessageFeature;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ public class FeatureManager {
     }
 
     public static void registerAll() {
+        register(new StartupMessageFeature());
+
         register(new AutoMelody());
         register(new AutoShardsClaim());
         register(new AutoExperiments());
@@ -31,6 +35,12 @@ public class FeatureManager {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             for (AbstractFeature f : FEATURES)
                 f.onTick(client);
+        });
+
+        // Register the new event for when the player joins a world
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+            for (AbstractFeature f : FEATURES)
+                f.onWorldLoad(client);
         });
     }
 }

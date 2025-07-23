@@ -1,45 +1,57 @@
 package sb.rocket.giovanniclient.client.util;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import sb.rocket.giovanniclient.client.config.ConfigManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sb.rocket.giovanniclient.client.config.DebugConfig;
 
 public class Utils {
-    private static final MinecraftClient client = MinecraftClient.getInstance();
-    private static final DebugConfig cfg = ConfigManager.getConfig().dc;
+    public static final Logger LOGGER = LoggerFactory.getLogger("GiovanniClient");
+    private static DebugConfig debugConfig;
 
-    public static void out(String s) {
-        if (client != null && client.inGameHud != null) {
+    public static void init(DebugConfig debugConfig) {
+        if (Utils.debugConfig != null) {
+            LOGGER.warn("Utils.init() called multiple times!");
+        }
+        Utils.debugConfig = debugConfig;
+        LOGGER.info("Utils initialized with DebugConfig.");
+    }
 
-            Text prefix = Text.literal("Giovanni > ")
-                    .setStyle(Style.EMPTY.withColor(Formatting.LIGHT_PURPLE));
+    private static void sendFormattedChatMessage(String prefixText, Formatting prefixStyle, String messageText) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client != null && client.inGameHud != null && client.inGameHud.getChatHud() != null) {
+            MutableText prefix = Text.literal(prefixText)
+                    .setStyle(Style.EMPTY.withColor(prefixStyle));
 
-            Text message = Text.literal(s)
+            MutableText message = Text.literal(messageText)
                     .setStyle(Style.EMPTY.withColor(Formatting.WHITE));
 
-            client.inGameHud.getChatHud().addMessage(prefix.copy().append(message));
+            client.inGameHud.getChatHud().addMessage(prefix.append(message));
         }
     }
 
-    public static void chat(String s) {out(s);}
+    public static void chat(String message) {
+        sendFormattedChatMessage("Giovanni > ", Formatting.LIGHT_PURPLE, message);
+    }
 
-    public static void debug(String s) {
-        if (cfg.DEBUG && client != null && client.inGameHud != null) {
-
-            Text prefix = Text.literal("Giovanni DEBUG > ")
-                .setStyle(Style.EMPTY.withColor(Formatting.RED));
-
-            Text message = Text.literal(s)
-                .setStyle(Style.EMPTY.withColor(Formatting.WHITE));
-
-            client.inGameHud.getChatHud().addMessage(prefix.copy().append(message));
+    public static void debug(String message) {
+        LOGGER.debug("DEBUG (Giovanni): {}", message);
+        if (debugConfig != null && debugConfig.DEBUG) {
+            sendFormattedChatMessage("Giovanni DEBUG > ", Formatting.RED, message);
+        } else if (debugConfig == null) {
+            LOGGER.warn("Utils.debug() called before initialization of DebugConfig: {}", message);
         }
     }
 
-    public static void log(String s) {
-        System.out.println("GiovanniClient LOGGING: " + s);
+    public static void log(String message) {
+        LOGGER.info("{}", message);
+    }
+
+    public static void error(String message, Throwable throwable) {
+        LOGGER.error(message, throwable);
     }
 }
