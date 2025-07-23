@@ -16,7 +16,7 @@ public class AutoSolversConfig {
 //    public transient SlotActionType AUTOMELODY_CLICKTYPE; // good for experiments too
     @Expose
     @Accordion
-    @ConfigOption(name = "AutoExperiments", desc = "Automatically does the annoying experiments")
+    @ConfigOption(name = "AutoExperiments", desc = "")
     public AutoExperimentsAccordion autoExperimentsAccordion = new AutoExperimentsAccordion();
     public static class AutoExperimentsAccordion {
 

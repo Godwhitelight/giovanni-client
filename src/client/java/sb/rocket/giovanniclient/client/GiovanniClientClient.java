@@ -21,8 +21,8 @@ import java.util.concurrent.CompletableFuture;
 public class GiovanniClientClient implements ClientModInitializer {
     public static MinecraftClient mc = MinecraftClient.getInstance();
     public static final String MODID = "giovanniclient";
-    public static final String MOD_VERSION_NAME = "0.0.1-SNAPSHOT";
-    public static final int MOD_VERSION_CODE = 0x00001;
+    public static final String MOD_VERSION_NAME = "1.0 (beta)";
+    public static final int MOD_VERSION_CODE = 10001;
 
     public static final UpdateManager UPDATE_MANAGER = new UpdateManager();
 
