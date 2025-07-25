@@ -9,5 +9,9 @@ public class FunConfig {
     @ConfigOption(name = "Fake Ironman", desc = "Tony Stark")
     @ConfigEditorBoolean
     public boolean FAKE_IRONMAN_TOGGLE = false;
-    public final String FAKE_IRONMAN_PREFIX = "♲: ";
+
+    @Expose
+    @ConfigOption(name = "Troll Features", desc = "Keeps skyblock fun")
+    @ConfigEditorBoolean
+    public boolean TROLL_FEATURES = true;
 }

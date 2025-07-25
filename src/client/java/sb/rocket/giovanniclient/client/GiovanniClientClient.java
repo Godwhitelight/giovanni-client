@@ -14,6 +14,7 @@ import org.lwjgl.glfw.GLFW;
 import sb.rocket.giovanniclient.client.config.ConfigManager;
 import sb.rocket.giovanniclient.client.features.FeatureManager;
 import sb.rocket.giovanniclient.client.features.updater.UpdateManager;
+import sb.rocket.giovanniclient.client.util.ScoreboardCommand;
 import sb.rocket.giovanniclient.client.util.Utils; // Keep this import
 
 import java.util.concurrent.CompletableFuture;
@@ -68,6 +69,8 @@ public class GiovanniClientClient implements ClientModInitializer {
                         })
                 );
         });
+
+        ClientCommandRegistrationCallback.EVENT.register(ScoreboardCommand::register);
     }
 
     private void autoUpdateStuff() {

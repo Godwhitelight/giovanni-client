@@ -14,9 +14,9 @@ public class ChatMessageMixin {
     private final FunConfig fc = ConfigManager.getConfig().fc;
 
     /**
-     * This @ModifyVariable targets the 'content' String argument of the 'sendChatMessage' method.
+     * This @ModifyVariable targets the 'userInput' String argument of the 'sendChatMessage' method.
      * By injecting at the HEAD of the method and specifying 'argsOnly = true',
-     * we ensure that the 'content' variable is modified as soon as the method begins execution.
+     * we ensure that the 'userInput' variable is modified as soon as the method begins execution.
      * This means both the MessageBody (for signing) and the ChatMessageC2SPacket (for sending)
      * will receive the modified message, resolving signature mismatches.
      */
@@ -25,11 +25,14 @@ public class ChatMessageMixin {
             at = @At("HEAD"),
             argsOnly = true
     )
-    private String modifySentChatMessage(String content) {
-        if (fc.FAKE_IRONMAN_TOGGLE && !content.startsWith("/")) {
-            return "♲: " + content;
+    private String modifySentChatMessage(String userInput) {
+        if (fc.FAKE_IRONMAN_TOGGLE && !userInput.startsWith("/")) {
+            return "♲: " + userInput;
         }
 
-        return content;
+        if (fc.TROLL_FEATURES && userInput.equals("Help Wizardman!"))
+            return "Help Giovanni!";
+
+        return userInput;
     }
 }
