@@ -10,13 +10,15 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import sb.rocket.giovanniclient.client.config.ConfigManager;
 import sb.rocket.giovanniclient.client.features.FeatureManager;
 import sb.rocket.giovanniclient.client.features.updater.UpdateManager;
-import sb.rocket.giovanniclient.client.util.ScoreboardCommand;
+import sb.rocket.giovanniclient.client.util.ScoreboardUtils;
 import sb.rocket.giovanniclient.client.util.Utils; // Keep this import
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class GiovanniClientClient implements ClientModInitializer {
@@ -31,11 +33,9 @@ public class GiovanniClientClient implements ClientModInitializer {
     public void onInitializeClient() {
         Runtime.getRuntime().addShutdownHook(new Thread(ConfigManager::shutdown));
 
-        KeyBinding openGioCliConfigKey = KeyBindingHelper.registerKeyBinding(
-                new KeyBinding("Open Config", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_K,"GiovanniClient"));
+        KeyBinding openGioCliConfigKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("Open Config", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_K, "GiovanniClient"));
         ClientTickEvents.END_CLIENT_TICK.register(tickClient -> {
-            while (openGioCliConfigKey.wasPressed())
-                tickClient.execute(ConfigManager::openConfigScreen);
+            while (openGioCliConfigKey.wasPressed()) tickClient.execute(ConfigManager::openConfigScreen);
 
             if (ConfigManager.shouldOpenFromCommand) {
                 ConfigManager.shouldOpenFromCommand = false;
@@ -43,7 +43,7 @@ public class GiovanniClientClient implements ClientModInitializer {
             }
         });
 
-        registerClientCommand();
+        registerClientCommands();
 
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             ConfigManager.init();
@@ -57,20 +57,36 @@ public class GiovanniClientClient implements ClientModInitializer {
         });
     }
 
-    private void registerClientCommand() {
+    private void registerClientCommands() {
         String[] aliases = {"giovanni", "giovanniclient", "gio", "giocli", "giova", "zoo"};
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             for (String alias : aliases)
-                dispatcher.register(ClientCommandManager.literal(alias)
-                        .executes(context -> {
-                            ConfigManager.openConfigScreenFromCommand();
-                            return 1;
-                        })
-                );
+                dispatcher.register(ClientCommandManager.literal(alias).executes(context -> {
+                    ConfigManager.openConfigScreenFromCommand();
+                    return 1;
+                }));
         });
 
-        ClientCommandRegistrationCallback.EVENT.register(ScoreboardCommand::register);
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
+                dispatcher.register(ClientCommandManager.literal("sidebar").executes(context -> {
+                    List<String> lines = ScoreboardUtils.getCleanedSidebarLines();
+
+                    if (lines.isEmpty()) {
+                        context.getSource().sendFeedback(Text.literal("No scoreboard sidebar currently displayed or it is empty."));
+                        return 0;
+                    }
+
+                    context.getSource().sendFeedback(Text.literal("--- Scoreboard Sidebar ---"));
+                    for (String line : lines) {
+                        context.getSource().sendFeedback(Text.literal(line));
+                    }
+                    context.getSource().sendFeedback(Text.literal("--------------------------"));
+
+                    return 1;
+                }))
+        );
+
     }
 
     private void autoUpdateStuff() {

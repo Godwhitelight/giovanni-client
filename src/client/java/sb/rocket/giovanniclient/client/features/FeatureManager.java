@@ -8,6 +8,7 @@ import sb.rocket.giovanniclient.client.features.autosolvers.AutoFusion;
 import sb.rocket.giovanniclient.client.features.autosolvers.AutoMelody;
 import sb.rocket.giovanniclient.client.features.autosolvers.AutoShardsClaim;
 import sb.rocket.giovanniclient.client.features.updater.StartupMessageFeature;
+import sb.rocket.giovanniclient.client.util.PlayerLocator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,8 @@ public class FeatureManager {
 
     public static void registerAll() {
         register(new StartupMessageFeature());
+
+        register(new PlayerLocator());
 
         register(new AutoMelody());
         register(new AutoShardsClaim());
