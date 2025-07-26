@@ -5,7 +5,7 @@ current progress:
 # backend
 :white_check_mark: update checker
 
-- player locator
+:white_check_mark: player locator
 
 :white_check_mark: chat output instead of log output
 
