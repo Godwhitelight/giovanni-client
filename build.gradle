@@ -43,8 +43,8 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // Use Fabric's include configuration to bundle MoulConfig
-    modImplementation "org.notenoughupdates.moulconfig:modern-1.21.5:${project.moulconfig_version}"
-    include "org.notenoughupdates.moulconfig:modern-1.21.5:${project.moulconfig_version}"
+    modImplementation "org.notenoughupdates.moulconfig:modern-1.21.7:${project.moulconfig_version}"
+    include "org.notenoughupdates.moulconfig:modern-1.21.7:${project.moulconfig_version}"
 
     modImplementation "moe.nea:libautoupdate:0.1.0"
     include "moe.nea:libautoupdate:0.1.0"
